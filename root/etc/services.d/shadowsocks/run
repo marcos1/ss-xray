@@ -10,4 +10,6 @@ exec \
     --plugin-opts $PLUGIN_OPTS \
     --reuse-port \
     -v \
+    -t $TIMEOUT \
+    -u $DNS \
     $ARGS
