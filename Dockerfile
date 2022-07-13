@@ -73,15 +73,17 @@ RUN \
             echo "*** moving xray to /usr/bin ***" && \
             mv xray-plugin /usr/bin/
 
-ENV SERVER_PORT 1080
-ENV SERVER_ADDR 0.0.0.0
-ENV PASSWORD password
+ENV SERVER_ADDR=0.0.0.0
+ENV SERVER_PORT=8388
+ENV PASSWORD=
 ENV METHOD chacha20-ietf-poly1305
 ENV PLUGIN xray-plugin
 ENV PLUGIN_OPTS server
 ENV ARGS=
+ENV TIMEOUT=300
+ENV DNS_ADDRS="8.8.8.8,8.8.4.4"
 
 # copy local file
 COPY root/ /
 
-EXPOSE 1080
+EXPOSE 8388
