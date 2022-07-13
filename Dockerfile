@@ -84,4 +84,4 @@ ENV ARGS=
 # copy local file
 COPY root/ /
 
-EXPOSE $SERVRE_PORT
+EXPOSE $SERVER_PORT
