@@ -1,0 +1,13 @@
+#!/usr/bin/with-contenv bash
+
+exec \
+    s6-setuidgid abc /usr/bin/ss-server \
+    -s $SERVER_ADDR \
+    -p $SERVER_PORT \
+    -m $METHOD \
+    -k $PASSWORD \
+    --plugin $PLUGIN \
+    --plugin-opts $PLUGIN_OPTS \
+    -u \
+    -v \
+    $ARGS

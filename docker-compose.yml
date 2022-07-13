@@ -1,0 +1,82 @@
+version: '3.9'
+services:
+  gluetun-uk:
+      container_name: gluetun-uk
+      image: qmcgaw/gluetun
+      cap_add:
+        - NET_ADMIN
+      environment:
+        - VPNSP=surfshark
+        - OPENVPN_USER=mCtstx6ZW2Nd5kd4XAw5BQry
+        - OPENVPN_PASSWORD=wSqUBgtjPRTUpAxLsapbGVtn
+        - SERVER_REGIONS=UK London
+        # - SERVER_HOSTNAME=uk-lon-mp001.prod.surfshark.com
+      expose:
+        - 1080 # ss-xray-uk
+        - 1080/udp # ss-xray-uk
+      dns:
+        - 1.1.1.1
+        - 1.0.0.1
+      networks:
+        - vpn-uk
+      restart: always
+
+  shadowocks-xray-uk:
+    image: ss-xray
+    container_name: ss-xray-uk
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - SERVER_PORT=1080
+      - SERVER_ADDR=0.0.0.0
+      - METHOD=chacha20-ietf-poly1305
+      - PASSWORD=Ug4QEXzHX8c7Z3
+      - 'PLUGIN_OPTS=server;path=/freedom'
+    depends_on:
+        gluetun-uk:
+          condition: service_healthy
+    network_mode: service:gluetun-uk
+    restart: unless-stopped
+
+  gluetun-hk:
+    container_name: gluetun-hk
+    image: qmcgaw/gluetun
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - VPNSP=surfshark
+      - OPENVPN_USER=mCtstx6ZW2Nd5kd4XAw5BQry
+      - OPENVPN_PASSWORD=wSqUBgtjPRTUpAxLsapbGVtn
+      # - SERVER_REGIONS=Hong Kong
+      - SERVER_HOSTNAME=hk-hkg.prod.surfshark.com
+    expose:
+      - 1090 # ss-xray-hk
+      - 1090/udp # ss-xray-hk
+    dns:
+      - 1.1.1.1
+      - 1.0.0.1
+    networks:
+      - vpn-hk
+    restart: always
+
+  shadowocks-xray-hk:
+    image: ss-xray
+    container_name: ss-xray-hk
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - SERVER_PORT=1090
+      - SERVER_ADDR=0.0.0.0
+      - METHOD=chacha20-ietf-poly1305
+      - PASSWORD=Ug4QEXzHX8c7Z3
+      - 'PLUGIN_OPTS=server;path=/freedom'
+    depends_on:
+        gluetun-hk:
+          condition: service_healthy
+    network_mode: service:gluetun-hk
+    restart: unless-stopped
+networks:
+  vpn-uk:
+    external: true
+  vpn-hk:
+    external: true
